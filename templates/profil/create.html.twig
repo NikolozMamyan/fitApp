@@ -1,0 +1,123 @@
+{% extends 'base_app.html.twig' %}
+
+{% block title %}Calculateur Nutritionnel{% endblock %}
+
+{% block body %}
+<div class="calculator-wrapper">
+    <div class="calculator-container">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <div class="calculator-sidebar">
+                    <h2 class="h4 mb-4">Guide de calcul</h2>
+                    <div class="sidebar-steps">
+                        <div class="sidebar-step mb-3">
+                            <i class="fas fa-ruler me-2"></i>
+                            Mensurations
+                        </div>
+                        <div class="sidebar-step mb-3">
+                            <i class="fas fa-venus-mars me-2"></i>
+                            Informations personnelles
+                        </div>
+                        <div class="sidebar-step">
+                            <i class="fas fa-bullseye me-2"></i>
+                            Objectifs
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-8">
+                <div class="p-4">
+                    <div class="calculator-header">
+                        <div class="step-indicator">
+                            <div class="step">1</div>
+                            <h1 class="h3 mb-0">Calculateur Nutritionnel</h1>
+                        </div>
+                        <p class="text-muted">Remplissez le formulaire pour obtenir votre plan personnalisé</p>
+                    </div>
+
+                    <div class="info-box">
+                        <i class="fas fa-info-circle"></i>
+                        <p class="mb-0">Les calculs sont basés sur des formules scientifiquement validées</p>
+                    </div>
+
+                    {{ form_start(form, {'attr': {'data-turbo': 'false', 'class': 'needs-validation'}}) }}
+                        
+                        <div class="form-group">
+                            <h3 class="h5 mb-3">Mensurations</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="metric-field mb-3">
+                                        {{ form_label(form.taille, 'Taille', {'label_attr': {'class': 'form-label'}}) }}
+                                        {{ form_widget(form.taille, {
+                                            'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': '170'
+                                            }
+                                        }) }}
+                                        <span class="unit">cm</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="metric-field mb-3">
+                                        {{ form_label(form.poids, 'Poids', {'label_attr': {'class': 'form-label'}}) }}
+                                        {{ form_widget(form.poids, {
+                                            'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': '70'
+                                            }
+                                        }) }}
+                                        <span class="unit">kg</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <h3 class="h5 mb-3">Informations personnelles</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form_label(form.age, 'Âge', {'label_attr': {'class': 'form-label'}}) }}
+                                        {{ form_widget(form.age, {
+                                            'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': '25'
+                                            }
+                                        }) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form_label(form.sexe, 'Sexe', {'label_attr': {'class': 'form-label'}}) }}
+                                        {{ form_widget(form.sexe, {
+                                            'attr': {
+                                                'class': 'form-select'
+                                            }
+                                        }) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <h3 class="h5 mb-3">Objectif</h3>
+                            {{ form_widget(form.objectif, {
+                                'attr': {
+                                    'class': 'form-select'
+                                }
+                            }) }}
+                        </div>
+
+                        <button type="submit" class="btn-calculate">
+                            <i class="fas fa-calculator me-2"></i>
+                            Calculer mon plan nutritionnel
+                        </button>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,390 @@
+{# templates/security/auth.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<style>
+:root {
+    --primary: #2D3436;
+    --secondary: #636E72;
+    --accent: #00B894;
+    --light: #DFE6E9;
+    --bg: #F5F6FA;
+}
+
+body {
+    background: var(--bg);
+    font-family: 'Inter', sans-serif;
+}
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.auth-box {
+    background: white;
+    width: 100%;
+    max-width: 460px;
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
+    background: var(--accent);
+    border-radius: 12px;
+    margin: 0 auto 1rem;
+}
+
+.auth-title {
+    font-size: 1.75rem;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.auth-subtitle {
+    color: var(--secondary);
+    font-size: 0.95rem;
+}
+
+.form-wrapper {
+    position: relative;
+    height: 400px;
+    perspective: 1000px;
+}
+
+.auth-form {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    transition: transform 0.6s ease-in-out;
+}
+
+.login-form {
+    transform: rotateY(0deg);
+}
+
+.register-form {
+    transform: rotateY(180deg);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--light);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s;
+    background: var(--bg);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: white;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.auth-btn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.auth-btn:hover {
+    background: #00A088;
+}
+
+.switch-text {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--secondary);
+    font-size: 0.9rem;
+}
+
+.switch-btn {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.divider {
+    margin: 2rem 0;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--secondary);
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--light);
+}
+
+.divider span {
+    padding: 0 1rem;
+    font-size: 0.9rem;
+}
+
+.social-login {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.social-btn {
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--light);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: var(--secondary);
+}
+
+.social-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.flipped .login-form {
+    transform: rotateY(-180deg);
+}
+
+.flipped .register-form {
+    transform: rotateY(0deg);
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.alert-danger {
+    background: #FFE9E9;
+    color: #DC3545;
+    border: 1px solid #FFD1D1;
+}
+
+.alert-info {
+    background: #E9F5FF;
+    color: #0066CC;
+    border: 1px solid #B8E2FF;
+}
+
+.alert-success {
+    background: #E6FFED;
+    color: #28A745;
+    border: 1px solid #C3E6CB;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="auth-container">
+    <div class="auth-box">
+        <div class="auth-header">
+            <div class="logo"></div>
+            <h1 class="auth-title" id="formTitle">Connexion</h1>
+            <p class="auth-subtitle" id="formSubtitle">Ravi de vous revoir !</p>
+        </div>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+
+        {% if error %}
+            <div class="alert alert-danger">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="alert alert-info">
+                Vous êtes connecté en tant que {{ app.user.userIdentifier }}, 
+                <a href="{{ path('app_logout') }}" class="switch-btn">Déconnexion</a>
+            </div>
+        {% endif %}
+
+        <div class="form-wrapper" id="formWrapper">
+            {# Formulaire de connexion #}
+            <div class="auth-form login-form">
+                <form method="post">
+                    <div class="form-group">
+                        <label class="form-label" for="inputEmail">Email</label>
+                        <input 
+                            type="email" 
+                            value="{{ last_username }}" 
+                            name="email" 
+                            id="inputEmail" 
+                            class="form-control" 
+                            autocomplete="email" 
+                            required 
+                            autofocus
+                            placeholder="votreemail@exemple.com"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="inputPassword">Mot de passe</label>
+                        <input 
+                            type="password" 
+                            name="password" 
+                            id="inputPassword" 
+                            class="form-control" 
+                            autocomplete="current-password" 
+                            required
+                            placeholder="••••••••"
+                        >
+                    </div>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <button type="submit" class="auth-btn mt-3">Se connecter</button>
+                </form>
+            </div>
+
+            {# Formulaire d'inscription #}
+            <div class="auth-form register-form">
+                <form method="post" action="{{ path('app_register') }}">
+                    <div class="form-group">
+                        <label class="form-label" for="registerName">Nom</label>
+                        <input 
+                            type="text" 
+                            name="name" 
+                            id="registerName" 
+                            class="form-control" 
+                            required
+                            placeholder="Votre nom"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="registerEmail">Email</label>
+                        <input 
+                            type="email" 
+                            name="email" 
+                            id="registerEmail" 
+                            class="form-control" 
+                            required
+                            placeholder="votreemail@exemple.com"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="registerPassword">Mot de passe</label>
+                        <input 
+                            type="password" 
+                            name="password" 
+                            id="registerPassword" 
+                            class="form-control" 
+                            required
+                            placeholder="••••••••"
+                        >
+                    </div>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('register') }}">
+
+                    <button type="submit" class="auth-btn">S'inscrire</button>
+                </form>
+            </div>
+        </div>
+
+        <p class="switch-text">
+            <span id="switchText">Pas encore de compte ?</span> 
+            <a href="#" id="switchBtn" class="switch-btn">S'inscrire</a>
+        </p>
+
+        <div class="divider">
+            <span>ou continuer avec</span>
+        </div>
+
+        <div class="social-login">
+            <a class="social-btn">
+                <i class="bi bi-google"></i>
+            </a>
+            <a class="social-btn">
+                <i class="bi bi-apple"></i>
+            </a>
+            <a class="social-btn">
+                <i class="bi bi-facebook"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const formWrapper = document.getElementById('formWrapper');
+    const switchBtn = document.getElementById('switchBtn');
+    const formTitle = document.getElementById('formTitle');
+    const formSubtitle = document.getElementById('formSubtitle');
+    const switchText = document.getElementById('switchText');
+    let isLogin = true;
+
+    switchBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        formWrapper.classList.toggle('flipped');
+        isLogin = !isLogin;
+
+        if (isLogin) {
+            formTitle.textContent = 'Connexion';
+            formSubtitle.textContent = 'Ravi de vous revoir !';
+            switchText.textContent = 'Pas encore de compte ?';
+            switchBtn.textContent = 'S\'inscrire';
+        } else {
+            formTitle.textContent = 'Créer un compte';
+            formSubtitle.textContent = 'Rejoignez-nous dès maintenant';
+            switchText.textContent = 'Déjà un compte ?';
+            switchBtn.textContent = 'Se connecter';
+        }
+    });
+});
+</script>
+{% endblock %}

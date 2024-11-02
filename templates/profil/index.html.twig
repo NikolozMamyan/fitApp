@@ -1,0 +1,150 @@
+{% extends 'base_app.html.twig' %}
+
+{% block title %}Mon Profil Fitness{% endblock %}
+
+
+
+{% block body %}
+
+
+<div class="profile-wrapper body">
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="container text-center">
+                <div class="avatar-container mb-4">
+                    <img src="{{ asset('images/avatar.png') }}" alt="Avatar" class="avatar">
+                </div>
+                <h1 class="display-6 text-white fw-bold mb-2">{{ app.user.name }}</h1>
+                <p class="text-white-50 mb-0">Suivi nutritionnel quotidien</p>
+            </div>
+        </div>
+
+        <div class="stats-container ">
+            <div class="row g-4">
+            {% if stats is null %}
+            <div class="container d-flex justify-content-center row gap-3">
+            <div class="info-box d-flex justify-content-center align-items-center gap-2 rounded" style="background-color:var(--fresh-peach);">
+                        <i class="fas fa-info-circle"></i>
+                        <p class="mb-0" >Vous n'avez pas créé de programme</p>
+                    </div>
+                 <a class="btn btn-light btn-lg rounded-pill " style="background-color:var(--warm-sand);" href="{{ path('app_calcul') }}">Créer un programme</a>
+            </div>
+ 
+{% else %}
+                <!-- Calories -->
+                <div class="col-md-6">
+                    <div class="stat-card calories position-relative">
+                        <span class="stat-percentage">{{ calories_percentage }}%</span>
+                        <div class="stat-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <h3 class="h5 mb-3">Calories</h3>
+                        <div class="progress">
+                            <div class="progress-bar" 
+                                 style="width: {{ calories_percentage }}%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="stat-value">{{ calories_consumed }} kcal</div>
+                            <div class="stat-goal">Objectif: {{ calories_goal }} kcal</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vitamines -->
+                <div class="col-md-6">
+                    <div class="stat-card vitamins position-relative">
+                        <span class="stat-percentage">{{ fibers_percentage }}%</span>
+                        <div class="stat-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3 class="h5 mb-3">Fibres</h3>
+                        <div class="progress">
+                            <div class="progress-bar" 
+                                 style="width: {{ fibers_percentage }}%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="stat-value">{{ fibers_consumed }} mg</div>
+                            <div class="stat-goal">Objectif: {{ fibers_goal }} mg</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="stat-card vitamins position-relative">
+                        <span class="stat-percentage">{{ water_percentage }}%</span>
+                        <div class="stat-icon">
+                            <i class="fas fa-water"></i>
+                        </div>
+                        <h3 class="h5 mb-3">Eau</h3>
+                        <div class="progress">
+                            <div class="progress-bar" 
+                                 style="width: {{ water_percentage }}%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="stat-value">{{ water_consumed }} ml</div>
+                            <div class="stat-goal">Objectif: {{ water_goal }} L</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="stat-card vitamins position-relative">
+                        <span class="stat-percentage">{{ lipids_percentage }}%</span>
+                        <div class="stat-icon">
+                            <i class="fas fa-burger"></i>
+                        </div>
+                        <h3 class="h5 mb-3">lipides</h3>
+                        <div class="progress">
+                            <div class="progress-bar" 
+                                 style="width: {{ lipids_percentage }}%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="stat-value">{{ lipids_consumed }} mg</div>
+                            <div class="stat-goal">Objectif: {{ lipids_goal }} mg</div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Protéines -->
+                <div class="col-md-6">
+                    <div class="stat-card proteins position-relative">
+                        <span class="stat-percentage">{{ proteins_percentage }}%</span>
+                        <div class="stat-icon">
+                            <i class="fas fa-drumstick-bite"></i>
+                        </div>
+                        <h3 class="h5 mb-3">Protéines</h3>
+                        <div class="progress">
+                            <div class="progress-bar" 
+                                 style="width: {{ proteins_percentage }}%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="stat-value">{{ proteins_consumed }} g</div>
+                            <div class="stat-goal">Objectif: {{ proteins_goal }} g</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Glucides -->
+                <div class="col-md-6">
+                    <div class="stat-card carbs position-relative">
+                        <span class="stat-percentage">{{ carbs_percentage }}%</span>
+                        <div class="stat-icon">
+                            <i class="fas fa-bread-slice"></i>
+                        </div>
+                        <h3 class="h5 mb-3">Glucides</h3>
+                        <div class="progress">
+                            <div class="progress-bar" 
+                                 style="width: {{ carbs_percentage }}%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="stat-value">{{ carbs_consumed }} g</div>
+                            <div class="stat-goal">Objectif: {{ carbs_goal }} g</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

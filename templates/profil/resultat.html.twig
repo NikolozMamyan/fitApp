@@ -1,0 +1,122 @@
+{% extends 'base_app.html.twig' %}
+
+{% block title %}Résultats Nutritionnels{% endblock %}
+
+
+
+{% block body %}
+<div class="results-container">
+    <div class="results-card">
+        <div class="results-header">
+            <h1 class="h3 mb-2">Vos Besoins Nutritionnels</h1>
+            <p class="mb-0">Voici votre plan nutritionnel personnalisé</p>
+        </div>
+
+        <div class="results-body">
+            <div class="row g-4">
+                <!-- Calories -->
+                <div class="col-md-6">
+                    <div class="nutrient-card">
+                        <div class="nutrient-icon" style="background: rgba(234, 196, 213, 0.2); color: var(--fresh-peach);">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="nutrient-value">{{ calories|number_format(0) }}</div>
+                        <div class="nutrient-label">Calories quotidiennes</div>
+                        <small class="text-muted">kcal par jour</small>
+                        <div class="decoration-circle"></div>
+                    </div>
+                </div>
+
+                <!-- Protéines -->
+                <div class="col-md-6">
+                    <div class="nutrient-card">
+                        <div class="nutrient-icon" style="background: rgba(127, 182, 133, 0.2); color: var(--sage-green);">
+                            <i class="fas fa-drumstick-bite"></i>
+                        </div>
+                        <div class="nutrient-value">{{ proteines|number_format(0) }}</div>
+                        <div class="nutrient-label">Protéines</div>
+                        <small class="text-muted">grammes par jour</small>
+                        <div class="decoration-circle"></div>
+                    </div>
+                </div>
+
+                <!-- Glucides -->
+                <div class="col-md-6">
+                    <div class="nutrient-card">
+                        <div class="nutrient-icon" style="background: rgba(149, 184, 209, 0.2); color: var(--calm-blue);">
+                            <i class="fas fa-bread-slice"></i>
+                        </div>
+                        <div class="nutrient-value">{{ glucides|number_format(0) }}</div>
+                        <div class="nutrient-label">Glucides</div>
+                        <small class="text-muted">grammes par jour</small>
+                        <div class="decoration-circle"></div>
+                    </div>
+                </div>
+
+                <!-- Lipides -->
+                <div class="col-md-6">
+                    <div class="nutrient-card">
+                        <div class="nutrient-icon" style="background: rgba(234, 225, 223, 0.2); color: #d4a373;">
+                            <i class="fas fa-cheese"></i>
+                        </div>
+                        <div class="nutrient-value">{{ lipides|number_format(0) }}</div>
+                        <div class="nutrient-label">Lipides</div>
+                        <small class="text-muted">grammes par jour</small>
+                        <div class="decoration-circle"></div>
+                    </div>
+                </div>
+
+                <!-- Fibres -->
+                <div class="col-md-6">
+                    <div class="nutrient-card">
+                        <div class="nutrient-icon" style="background: rgba(184, 224, 210, 0.2); color: var(--soft-mint);">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="nutrient-value">{{ fibres|number_format(0) }}</div>
+                        <div class="nutrient-label">Fibres alimentaires</div>
+                        <small class="text-muted">grammes par jour</small>
+                        <div class="decoration-circle"></div>
+                    </div>
+                </div>
+
+                <!-- Eau -->
+                <div class="col-md-6">
+                    <div class="nutrient-card">
+                        <div class="nutrient-icon" style="background: rgba(149, 184, 209, 0.2); color: var(--calm-blue);">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="nutrient-value">{{ (wather)|number_format(2) }}</div>
+                        <div class="nutrient-label">Eau</div>
+                        <small class="text-muted">litres par jour</small>
+                        <div class="decoration-circle"></div>
+                    </div>
+                </div>
+
+                <!-- Vitamine C -->
+                <div class="col-12">
+                    <div class="nutrient-card">
+                        <div class="nutrient-icon" style="background: rgba(234, 196, 213, 0.2); color: var(--fresh-peach);">
+                            <i class="fas fa-lemon"></i>
+                        </div>
+                        <div class="nutrient-value">{{ vitamineC }}</div>
+                        <div class="nutrient-label">Vitamine C</div>
+                        <small class="text-muted">mg par jour</small>
+                        <div class="decoration-circle"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn-action btn-primary">
+                    <i class="fas fa-download me-2"></i>
+                    Télécharger PDF
+                </button>
+                <a href="{{ path('app_profil') }}" class="btn-action btn-secondary text-decoration-none" onclick="window.print()">
+                    <i class="fas fa-print me-2"></i>
+                    Mon profil
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
