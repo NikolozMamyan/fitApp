@@ -402,6 +402,55 @@ body{
     font-size: 0.9rem;
     color: var(--sage-green);
 }
+/* calendar */
+.calendar-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.calendar-day {
+    width: calc(100% / 7);
+    font-weight: 500;
+    color: #666;
+}
+
+.calendar-date {
+    width: calc(100% / 7);
+    aspect-ratio: 1;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.calendar-date:hover {
+    background-color: #f8f9fa;
+}
+
+.calendar-date.active {
+    background-color: #FF6B6B;
+    color: white;
+}
+
+.calendar-date.has-data::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #FF8E53;
+}
+
+.calendar-body {
+    display: flex;
+    flex-wrap: wrap;
+}
 
 @media (max-width: 768px) {
     .profile-wrapper {

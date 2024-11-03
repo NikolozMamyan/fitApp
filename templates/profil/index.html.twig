@@ -19,132 +19,203 @@
             </div>
         </div>
 
-        <div class="stats-container ">
-            <div class="row g-4">
-            {% if stats is null %}
-            <div class="container d-flex justify-content-center row gap-3">
+<div class="stats-container">
+    <div class="row g-4">
+    {% if stats is null %}
+        <div class="container d-flex justify-content-center row gap-3">
             <div class="info-box d-flex justify-content-center align-items-center gap-2 rounded" style="background-color:var(--fresh-peach);">
-                        <i class="fas fa-info-circle"></i>
-                        <p class="mb-0" >Vous n'avez pas créé de programme</p>
-                    </div>
-                 <a class="btn btn-light btn-lg rounded-pill " style="background-color:var(--warm-sand);" href="{{ path('app_calcul') }}">Créer un programme</a>
+                <i class="fas fa-info-circle"></i>
+                <p class="mb-0">Vous n'avez pas créé de programme</p>
             </div>
- 
-{% else %}
-                <!-- Calories -->
-                <div class="col-md-6">
-                    <div class="stat-card calories position-relative">
-                        <span class="stat-percentage">{{ calories_percentage }}%</span>
-                        <div class="stat-icon">
-                            <i class="fas fa-fire"></i>
-                        </div>
-                        <h3 class="h5 mb-3">Calories</h3>
-                        <div class="progress">
-                            <div class="progress-bar" 
-                                 style="width: {{ calories_percentage }}%"></div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="stat-value">{{ calories_consumed }} kcal</div>
-                            <div class="stat-goal">Objectif: {{ calories_goal }} kcal</div>
-                        </div>
-                    </div>
+            <a class="btn btn-light btn-lg rounded-pill" style="background-color:var(--warm-sand);" href="{{ path('app_calcul') }}">Créer un programme</a>
+        </div>
+    {% else %}
+<!-- Calories (pleine largeur) -->
+<div class="col-12 mb-4">
+    <div class="stat-card calories position-relative p-4" style="background: linear-gradient(45deg, #FF6B6B, #FF8E53); border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+        <div class="row align-items-center">
+            <div class="col-md-3 text-center">
+                <div class="stat-icon mb-3" style="font-size: 3rem; height: 80px; width: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-fire text-white"></i>
                 </div>
-
-                <!-- Vitamines -->
-                <div class="col-md-6">
-                    <div class="stat-card vitamins position-relative">
-                        <span class="stat-percentage">{{ fibers_percentage }}%</span>
-                        <div class="stat-icon">
-                            <i class="fas fa-leaf"></i>
-                        </div>
-                        <h3 class="h5 mb-3">Fibres</h3>
-                        <div class="progress">
-                            <div class="progress-bar" 
-                                 style="width: {{ fibers_percentage }}%"></div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="stat-value">{{ fibers_consumed }} mg</div>
-                            <div class="stat-goal">Objectif: {{ fibers_goal }} mg</div>
-                        </div>
-                    </div>
+            </div>
+            <div class="col-md-9">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="h4 text-white mb-0">Calories Quotidiennes</h3>
+                    <span class="stat-percentage h3 mb-0">{{ calories_percentage }}%</span>
                 </div>
-
-                <div class="col-md-6">
-                    <div class="stat-card vitamins position-relative">
-                        <span class="stat-percentage">{{ water_percentage }}%</span>
-                        <div class="stat-icon">
-                            <i class="fas fa-water"></i>
-                        </div>
-                        <h3 class="h5 mb-3">Eau</h3>
-                        <div class="progress">
-                            <div class="progress-bar" 
-                                 style="width: {{ water_percentage }}%"></div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="stat-value">{{ water_consumed }} ml</div>
-                            <div class="stat-goal">Objectif: {{ water_goal }} L</div>
-                        </div>
-                    </div>
+                <div class="progress mb-3" style="height: 15px; background: rgba(255,255,255,0.2); border-radius: 10px;">
+                    <div class="progress-bar" 
+                         style="width: {{ calories_percentage }}%; back  border-radius: 10px;"></div>
                 </div>
-                <div class="col-md-6">
-                    <div class="stat-card vitamins position-relative">
-                        <span class="stat-percentage">{{ lipids_percentage }}%</span>
-                        <div class="stat-icon">
-                            <i class="fas fa-burger"></i>
-                        </div>
-                        <h3 class="h5 mb-3">lipides</h3>
-                        <div class="progress">
-                            <div class="progress-bar" 
-                                 style="width: {{ lipids_percentage }}%"></div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="stat-value">{{ lipids_consumed }} mg</div>
-                            <div class="stat-goal">Objectif: {{ lipids_goal }} mg</div>
-                        </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="stat-value h5 text-white mb-0">
+                        <span class="h3">{{ calories_consumed }}</span> 
+                        <span class="text-white-50">kcal consommées</span>
                     </div>
-                </div>
-
-
-                <!-- Protéines -->
-                <div class="col-md-6">
-                    <div class="stat-card proteins position-relative">
-                        <span class="stat-percentage">{{ proteins_percentage }}%</span>
-                        <div class="stat-icon">
-                            <i class="fas fa-drumstick-bite"></i>
-                        </div>
-                        <h3 class="h5 mb-3">Protéines</h3>
-                        <div class="progress">
-                            <div class="progress-bar" 
-                                 style="width: {{ proteins_percentage }}%"></div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="stat-value">{{ proteins_consumed }} g</div>
-                            <div class="stat-goal">Objectif: {{ proteins_goal }} g</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Glucides -->
-                <div class="col-md-6">
-                    <div class="stat-card carbs position-relative">
-                        <span class="stat-percentage">{{ carbs_percentage }}%</span>
-                        <div class="stat-icon">
-                            <i class="fas fa-bread-slice"></i>
-                        </div>
-                        <h3 class="h5 mb-3">Glucides</h3>
-                        <div class="progress">
-                            <div class="progress-bar" 
-                                 style="width: {{ carbs_percentage }}%"></div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="stat-value">{{ carbs_consumed }} g</div>
-                            <div class="stat-goal">Objectif: {{ carbs_goal }} g</div>
-                        </div>
+                    <div class="stat-goal h5 text-white mb-0">
+                        <span class="text-white-50">Objectif:</span> 
+                        <span class="h3">{{ calories_goal }}</span> 
+                        <span class="text-white-50">kcal</span>
                     </div>
                 </div>
             </div>
-            {% endif %}
         </div>
     </div>
 </div>
+
+        <!-- Trois colonnes en bas -->
+        <div class="col-md-4">
+            <div class="stat-card carbs position-relative">
+                <span class="stat-percentage">{{ carbs_percentage }}%</span>
+                <div class="stat-icon">
+                    <i class="fas fa-bread-slice"></i>
+                </div>
+                <h3 class="h5 mb-3">Glucides</h3>
+                <div class="progress">
+                    <div class="progress-bar" style="width: {{ carbs_percentage }}%"></div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="stat-value">{{ carbs_consumed }} g</div>
+                    <div class="stat-goal">Objectif: {{ carbs_goal }} g</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card proteins position-relative">
+                <span class="stat-percentage">{{ proteins_percentage }}%</span>
+                <div class="stat-icon">
+                    <i class="fas fa-drumstick-bite"></i>
+                </div>
+                <h3 class="h5 mb-3">Protéines</h3>
+                <div class="progress">
+                    <div class="progress-bar" style="width: {{ proteins_percentage }}%"></div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="stat-value">{{ proteins_consumed }} g</div>
+                    <div class="stat-goal">Objectif: {{ proteins_goal }} g</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card vitamins position-relative">
+                <span class="stat-percentage">{{ lipids_percentage }}%</span>
+                <div class="stat-icon">
+                    <i class="fas fa-burger"></i>
+                </div>
+                <h3 class="h5 mb-3">Lipides</h3>
+                <div class="progress">
+                    <div class="progress-bar" style="width: {{ lipids_percentage }}%"></div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="stat-value">{{ lipids_consumed }} mg</div>
+                    <div class="stat-goal">Objectif: {{ lipids_goal }} mg</div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    </div>
+</div>
+<!-- Calendrier -->
+<div class="col-12 mt-4">
+    <div class="calendar-card p-4" style="background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="h4 mb-0">Historique Nutritionnel</h3>
+            <div class="calendar-nav">
+                <button class="btn btn-sm btn-outline-secondary" id="prevMonth">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span class="mx-3 fw-bold" id="currentMonth"></span>
+                <button class="btn btn-sm btn-outline-secondary" id="nextMonth">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="calendar-grid">
+            <div class="calendar-header d-flex justify-content-between mb-3">
+                <div class="calendar-day text-center">Lun</div>
+                <div class="calendar-day text-center">Mar</div>
+                <div class="calendar-day text-center">Mer</div>
+                <div class="calendar-day text-center">Jeu</div>
+                <div class="calendar-day text-center">Ven</div>
+                <div class="calendar-day text-center">Sam</div>
+                <div class="calendar-day text-center">Dim</div>
+            </div>
+            <div id="calendar-body" class="calendar-body"></div>
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const calendarBody = document.getElementById('calendar-body');
+    const currentMonthSpan = document.getElementById('currentMonth');
+    const prevMonthBtn = document.getElementById('prevMonth');
+    const nextMonthBtn = document.getElementById('nextMonth');
+    
+    let currentDate = new Date();
+    
+    function renderCalendar(date) {
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        const startDay = firstDay.getDay() || 7; // Lundi = 1, Dimanche = 7
+        
+        currentMonthSpan.textContent = date.toLocaleDateString('fr-FR', { 
+            month: 'long', 
+            year: 'numeric' 
+        });
+        
+        let calendarHTML = '';
+        
+        // Ajouter les cases vides pour le début du mois
+        for (let i = 1; i < startDay; i++) {
+            calendarHTML += `<div class="calendar-date"></div>`;
+        }
+        
+        // Ajouter les jours du mois
+        for (let day = 1; day <= lastDay.getDate(); day++) {
+            const isToday = day === currentDate.getDate() && 
+                           date.getMonth() === currentDate.getMonth() && 
+                           date.getFullYear() === currentDate.getFullYear();
+            
+            calendarHTML += `
+                <div class="calendar-date ${isToday ? 'active' : ''}" data-date="${date.getFullYear()}-${date.getMonth() + 1}-${day}">
+                    <span class="day-number">${day}</span>
+                </div>
+            `;
+        }
+        
+        calendarBody.innerHTML = calendarHTML;
+        
+        // Ajouter les événements click
+        document.querySelectorAll('.calendar-date').forEach(date => {
+            date.addEventListener('click', function() {
+                if (this.dataset.date) {
+                    // Ici vous pouvez ajouter la logique pour charger les données du jour sélectionné
+                    console.log('Date sélectionnée:', this.dataset.date);
+                    // Exemple: chargerDonnees(this.dataset.date);
+                }
+            });
+        });
+    }
+    
+    // Navigation entre les mois
+    prevMonthBtn.addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar(currentDate);
+    });
+    
+    nextMonthBtn.addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar(currentDate);
+    });
+    
+    // Rendu initial du calendrier
+    renderCalendar(currentDate);
+});
+</script>
 {% endblock %}
