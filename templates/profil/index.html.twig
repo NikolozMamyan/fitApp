@@ -7,19 +7,154 @@
 {% block body %}
 
 
-<div class="profile-wrapper body">
-    <div class="profile-container">
-        <div class="profile-header">
-            <div class="container text-center">
-                <div class="avatar-container mb-4">
-                    <img src="{{ asset('images/avatar.png') }}" alt="Avatar" class="avatar">
-                </div>
-                <h1 class="display-6 text-white fw-bold mb-2">{{ app.user.name }}</h1>
-                <p class="text-white-50 mb-0">Suivi nutritionnel quotidien</p>
-            </div>
+<div class="container mt-4">
+<button class="add-food-btn" id="openModalBtn">
+    <i class="fas fa-plus"></i>
+    <span>Ajouter un aliment</span>
+</button>
+
+<div class="modal" id="food-modal" data-add-food-url="{{ path('app_add_food') }}">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Ajouter un aliment</h2>
+            <button type="button" class="close-btn" id="closeModalBtn">&times;</button>
         </div>
 
+<div class="modal-body">
+    <!-- Nouvelle section de choix initial -->
+    <div id="initialChoiceSection">
+        <h4>Comment souhaitez-vous ajouter un aliment ?</h4>
+        <div class="d-flex flex-column gap-3 mt-4">
+            <button type="button" class="btn btn-primary" id="chooseSearch">
+                <i class="fas fa-search"></i> Rechercher dans OpenFoodFacts
+            </button>
+            <button type="button" class="btn btn-secondary" id="chooseManual">
+                <i class="fas fa-edit"></i> Ajouter un aliment manuellement
+            </button>
+        </div>
+    </div>
+
+    <!-- Section de recherche existante -->
+    <div id="searchSection" style="display: none;">
+        <!-- Bouton retour -->
+        <button type="button" class="btn btn-link mb-3" id="backToChoiceFromSearch">
+            <i class="fas fa-arrow-left"></i> Retour
+        </button>
+
+        <form id="searchFoodForm" class="mb-3">
+            <div class="input-group">
+                <input type="text" class="form-control" id="food_name" name="food_name" placeholder="Rechercher un aliment..." required>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                    Rechercher
+                </button>
+            </div>
+        </form>
+
+        <div id="searchResults" class="search-results" style="max-height: 400px; overflow-y: auto;">
+            <!-- Résultats de recherche -->
+        </div>
+    </div>
+
+    <!-- Section d'ajout manuel -->
+    <div id="manualAddSection" style="display: none;">
+        <!-- Bouton retour -->
+        <button type="button" class="btn btn-link mb-3" id="backToChoiceFromManual">
+            <i class="fas fa-arrow-left"></i> Retour
+        </button>
+
+        <form id="manualAddForm">
+            <div class="mb-3">
+                <label for="manual_food_name" class="form-label">Nom de l'aliment</label>
+                <input type="text" class="form-control" id="manual_food_name" name="manual_food_name" required>
+            </div>
+            <div class="mb-3">
+                <label for="manual_food_quantity" class="form-label">Quantité (en grammes)</label>
+                <input type="number" class="form-control" id="manual_food_quantity" name="manual_food_quantity" required min="1">
+            </div>
+            <div class="mb-3">
+                <label for="manual_calories" class="form-label">Calories (kcal/100g)</label>
+                <input type="number" class="form-control" id="manual_calories" name="manual_calories" required min="0">
+            </div>
+            <div class="mb-3">
+                <label for="manual_proteins" class="form-label">Protéines (g/100g)</label>
+                <input type="number" class="form-control" id="manual_proteins" name="manual_proteins" required min="0">
+            </div>
+            <div class="mb-3">
+                <label for="manual_carbs" class="form-label">Glucides (g/100g)</label>
+                <input type="number" class="form-control" id="manual_carbs" name="manual_carbs" required min="0">
+            </div>
+            <div class="mb-3">
+                <label for="manual_fats" class="form-label">Lipides (g/100g)</label>
+                <input type="number" class="form-control" id="manual_fats" name="manual_fats" required min="0">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Ajouter cet aliment</button>
+        </form>
+    </div>
+
+    <!-- Section de quantité pour les aliments recherchés -->
+    <div id="quantitySection" style="display: none;">
+        <!-- Bouton retour -->
+        <button type="button" class="btn btn-link mb-3" id="backToSearch">
+            <i class="fas fa-arrow-left"></i> Retour à la recherche
+        </button>
+        <form id="addFoodForm">
+            <div class="mb-3">
+                <label for="food_quantity" class="form-label">Quantité (en grammes)</label>
+                <input type="number" class="form-control" id="food_quantity" name="food_quantity" required min="1">
+            </div>
+            <input type="hidden" id="food_id" name="food_id">
+            <div class="selected-food-info mb-3">
+                <!-- Info de l'aliment sélectionné -->
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Ajouter cet aliment</button>
+        </form>
+    </div>
+</div>
+
+<!-- ... Votre code existant ... -->
+
+    </div>
+</div>
+</div>
+<div class="profile-wrapper body">
+    <div class="profile-container">
+        <!-- Nouvelle disposition de l'en-tête -->
+        <div class="profile-header">
+            <div class="header-content">
+                <!-- Première rangée avec profil et horloge -->
+                <div class="top-row ms-5">
+                    <!-- Section profil à gauche -->
+                    <div class="profile-section">
+                        <div class="profile-info">
+                            <div class="avatar-container">
+                                <img src="{{ asset('images/avatar.png') }}" alt="Avatar" class="avatar">
+                            </div>
+                            <div class="user-info">
+                                <h1 class="user-name">{{ app.user.name }}</h1>
+                                <p class="user-subtitle">Suivi nutritionnel quotidien</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Horloge à droite -->
+                    <div class="clock-widget mt-5">
+                        <div class="clock-container">
+                            <div class="time">
+                                <span id="hours">00</span>
+                                <span class="colon">:</span>
+                                <span id="minutes">00</span>
+                                <span class="colon">:</span>
+                                <span id="seconds">00</span>
+                            </div>
+                            <div class="date" id="date">
+                                Lundi 1 Janvier
+                            </div>
+                        </div>
+                    </div>
+                </div>
 <div class="stats-container">
+
     <div class="row g-4">
     {% if stats is null %}
         <div class="container d-flex justify-content-center row gap-3">
@@ -110,112 +245,140 @@
                     <div class="progress-bar" style="width: {{ lipids_percentage }}%"></div>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
-                    <div class="stat-value">{{ lipids_consumed }} mg</div>
-                    <div class="stat-goal">Objectif: {{ lipids_goal }} mg</div>
+                    <div class="stat-value">{{ lipids_consumed }} g</div>
+                    <div class="stat-goal">Objectif: {{ lipids_goal }} g</div>
                 </div>
             </div>
         </div>
     {% endif %}
     </div>
 </div>
-<!-- Calendrier -->
+
+
+
+<!-- Section Historique Nutritionnel -->
 <div class="col-12 mt-4">
-    <div class="calendar-card p-4" style="background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+    <div class="history-card p-4" style="background: white; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="h4 mb-0">Historique Nutritionnel</h3>
-            <div class="calendar-nav">
-                <button class="btn btn-sm btn-outline-secondary" id="prevMonth">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <span class="mx-3 fw-bold" id="currentMonth"></span>
-                <button class="btn btn-sm btn-outline-secondary" id="nextMonth">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
+            <div class="time-range-selector">
+                <button class="btn btn-sm active" data-range="week">Semaine</button>
+                <button class="btn btn-sm" data-range="month">Mois</button>
+                <button class="btn btn-sm" data-range="year">Année</button>
             </div>
         </div>
-        
-        <div class="calendar-grid">
-            <div class="calendar-header d-flex justify-content-between mb-3">
-                <div class="calendar-day text-center">Lun</div>
-                <div class="calendar-day text-center">Mar</div>
-                <div class="calendar-day text-center">Mer</div>
-                <div class="calendar-day text-center">Jeu</div>
-                <div class="calendar-day text-center">Ven</div>
-                <div class="calendar-day text-center">Sam</div>
-                <div class="calendar-day text-center">Dim</div>
+
+        <!-- Conteneur pour les totaux nutritionnels -->
+        <div id="nutritionTotals" class="d-flex justify-content-around text-center mb-4">
+            <!-- Les totaux seront insérés ici via JavaScript -->
+        </div>
+
+        <!-- Graphique de tendance -->
+        <div class="trend-graph">
+            <canvas id="nutritionTrend" height="100"></canvas>
+        </div>
+
+        <!-- Calendrier hebdomadaire (uniquement pour la vue semaine) -->
+        <div id="weeklyCalendar" class="weekly-rings mb-4" style="display: none;">
+            <div class="rings-container d-flex justify-content-between">
+                <!-- Les anneaux seront générés dynamiquement via JavaScript -->
             </div>
-            <div id="calendar-body" class="calendar-body"></div>
         </div>
     </div>
 </div>
+{# menu.twig #}
+<div class="menu-container">
+    <div class="menu-button">
+        <i class="fas fa-bars"></i>
+    </div>
+    <div class="menu-items">
+        <div class="menu-item">
+            <i class="fas fa-home"></i>
+        </div>
+        <div class="menu-item">
+            <i class="fas fa-user"></i>
+        </div>
+        <div class="menu-item">
+            <i class="fas fa-cog"></i>
+        </div>
+        <!-- Ajoutez d'autres items si nécessaire -->
     </div>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-    const calendarBody = document.getElementById('calendar-body');
-    const currentMonthSpan = document.getElementById('currentMonth');
-    const prevMonthBtn = document.getElementById('prevMonth');
-    const nextMonthBtn = document.getElementById('nextMonth');
-    
-    let currentDate = new Date();
-    
-    function renderCalendar(date) {
-        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-        const startDay = firstDay.getDay() || 7; // Lundi = 1, Dimanche = 7
-        
-        currentMonthSpan.textContent = date.toLocaleDateString('fr-FR', { 
-            month: 'long', 
-            year: 'numeric' 
-        });
-        
-        let calendarHTML = '';
-        
-        // Ajouter les cases vides pour le début du mois
-        for (let i = 1; i < startDay; i++) {
-            calendarHTML += `<div class="calendar-date"></div>`;
-        }
-        
-        // Ajouter les jours du mois
-        for (let day = 1; day <= lastDay.getDate(); day++) {
-            const isToday = day === currentDate.getDate() && 
-                           date.getMonth() === currentDate.getMonth() && 
-                           date.getFullYear() === currentDate.getFullYear();
-            
-            calendarHTML += `
-                <div class="calendar-date ${isToday ? 'active' : ''}" data-date="${date.getFullYear()}-${date.getMonth() + 1}-${day}">
-                    <span class="day-number">${day}</span>
-                </div>
-            `;
-        }
-        
-        calendarBody.innerHTML = calendarHTML;
-        
-        // Ajouter les événements click
-        document.querySelectorAll('.calendar-date').forEach(date => {
-            date.addEventListener('click', function() {
-                if (this.dataset.date) {
-                    // Ici vous pouvez ajouter la logique pour charger les données du jour sélectionné
-                    console.log('Date sélectionnée:', this.dataset.date);
-                    // Exemple: chargerDonnees(this.dataset.date);
-                }
-            });
-        });
-    }
-    
-    // Navigation entre les mois
-    prevMonthBtn.addEventListener('click', () => {
-        currentDate.setMonth(currentDate.getMonth() - 1);
-        renderCalendar(currentDate);
+
+<style>
+/* style.css */
+.menu-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+}
+
+.menu-button {
+    width: 60px;
+    height: 60px;
+    background-color: #007bff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    cursor: pointer;
+}
+
+.menu-items {
+    display: none;
+    position: absolute;
+    flex-direction: column;
+    bottom: 70px;
+    left: 0;
+}
+
+.menu-container.active .menu-items {
+    display: flex;
+}
+
+.menu-item {
+    width: 50px;
+    height: 50px;
+    background-color: #17a2b8;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    background-color: #138496;
+}
+.menu-items {
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.menu-container.active .menu-items {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+</style>
+<script> 
+/* script.js */
+document.addEventListener('DOMContentLoaded', function() {
+    const menuButton = document.querySelector('.menu-button');
+    const menuContainer = document.querySelector('.menu-container');
+
+    menuButton.addEventListener('click', function() {
+        menuContainer.classList.toggle('active');
     });
-    
-    nextMonthBtn.addEventListener('click', () => {
-        currentDate.setMonth(currentDate.getMonth() + 1);
-        renderCalendar(currentDate);
-    });
-    
-    // Rendu initial du calendrier
-    renderCalendar(currentDate);
 });
+
 </script>
+<script src="{{ asset('js/modal.js') }}" defer type="module"></script>
+<script src="{{ asset('js/nutrition_history.js') }}" defer></script>
+<script src="{{ asset('js/time.js') }}" defer></script>
 {% endblock %}

@@ -42,9 +42,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: UserData::class, mappedBy: 'user')]
     private Collection $userData;
 
+    /**
+     * @var Collection<int, FoodConsumed>
+     */
+    #[ORM\OneToMany(targetEntity: FoodConsumed::class, mappedBy: 'user')]
+    private Collection $foodConsumeds;
+
     public function __construct()
     {
         $this->userData = new ArrayCollection();
+        $this->foodConsumeds = new ArrayCollection();
     }
 
 
@@ -159,6 +166,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($userData->getUser() === $this) {
                 $userData->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FoodConsumed>
+     */
+    public function getFoodConsumeds(): Collection
+    {
+        return $this->foodConsumeds;
+    }
+
+    public function addFoodConsumed(FoodConsumed $foodConsumed): static
+    {
+        if (!$this->foodConsumeds->contains($foodConsumed)) {
+            $this->foodConsumeds->add($foodConsumed);
+            $foodConsumed->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFoodConsumed(FoodConsumed $foodConsumed): static
+    {
+        if ($this->foodConsumeds->removeElement($foodConsumed)) {
+            // set the owning side to null (unless already changed)
+            if ($foodConsumed->getUser() === $this) {
+                $foodConsumed->setUser(null);
             }
         }
 

@@ -1,0 +1,29 @@
+{% if products is defined %}
+<!-- Modal -->
+<div class="modal" id="productSelectionModal" tabindex="-1" role="dialog" style="display:block; background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Sélectionnez un produit</h5>
+      </div>
+      <div class="modal-body">
+        <form action="{{ path('app_add_food') }}" method="POST">
+          <input type="hidden" name="food_quantity" value="{{ food_quantity }}">
+          {% for product in products %}
+            <div class="product-item mb-2">
+              <input type="radio" name="product_index" value="{{ loop.index0 }}" id="product{{ loop.index0 }}" required>
+              <label for="product{{ loop.index0 }}">
+                <strong>{{ product.product_name }}</strong> - {{ product.brands }}
+                {% if product.image_url %}
+                  <img src="{{ product.image_url }}" alt="{{ product.product_name }}" style="width:50px;">
+                {% endif %}
+              </label>
+            </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-primary mt-3">Confirmer</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
