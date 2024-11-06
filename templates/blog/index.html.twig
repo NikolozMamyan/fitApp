@@ -1,0 +1,346 @@
+{% extends 'base_app.html.twig' %}
+
+{% block title %}Blog Fitness{% endblock %}
+
+
+
+{% block body %}
+   <style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 0;
+        }
+
+        .post-card {
+            height: 500px;
+            border-radius: 0px;
+        }
+    }
+
+.nav-container {
+    /* Styles précédents */
+    position: fixed; /* Ajouté */
+    top: 0; /* Ajouté */
+    left: 0; /* Ajouté */
+    right: 0; /* Ajouté */
+    background-color: #fff; /* Ajouté pour le fond blanc */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ajouté pour l'ombre */
+    z-index: 100; /* Ajouté pour que le container soit au-dessus des autres éléments */
+}
+
+.nav-links {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 2rem; /* Réduit légèrement l'espace */
+    position: relative; /* Ajouté */
+}
+
+.nav-link {
+    color: #666; /* Couleur plus claire pour les liens inactifs */
+    text-decoration: none;
+    font-weight: 500; /* Légèrement moins gras */
+    font-size: 1rem;
+    padding: 1rem 0.5rem; /* Ajusté le padding */
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.3s ease; /* Transition de couleur */
+}
+
+.nav-link.active {
+    color: #6200ee; /* Couleur Material Design primary */
+}
+
+/* Nouveau style pour l'indicateur */
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #6200ee; /* Même couleur que le texte actif */
+    transform-origin: center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scaleX(1);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #6200ee;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animation au survol */
+.nav-link:hover::after {
+    transform: scaleX(0.5); /* Une ligne plus courte au survol */
+}
+.content-section{
+    margin-top:50px;
+}
+
+/* Animation pour le lien actif */
+.nav-link.active::after {
+    transform: scaleX(1);
+}
+
+    .content-section {
+        display: none;
+        animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    .content-section.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .posts-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    @media (min-width: 769px) {
+        .posts-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+        .post-card{
+            border-radius:12px;
+        }
+
+        .post-info h3 {
+            font-size: 1.3rem;
+        }
+
+        .post-description {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+        }
+
+        .category-tag {
+            font-size: 0.8rem;
+            padding: 0.4rem 0.8rem;
+        }
+
+        .post-author {
+            width: 35px;
+            height: 35px;
+        }
+    }
+
+    .post-card {
+        position: relative;
+        height: 400px;
+        overflow: hidden;
+    }
+
+    .post-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .post-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.2) 0%,
+            rgba(0, 0, 0, 0.6) 50%,
+            rgba(0, 0, 0, 0.8) 100%
+        );
+    }
+
+    .post-content {
+        position: relative;
+        z-index: 2;
+        color: white;
+        padding: 1.5rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+
+    .post-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .post-author {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--calm-blue);
+        margin-right: 1rem;
+        border: 2px solid white;
+    }
+
+    .post-info h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .post-date {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9rem;
+    }
+
+    .post-description {
+        color: rgba(255, 255, 255, 0.95);
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        font-size: 1rem;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .post-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .category-tag {
+        background-color: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(4px);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+</style>
+
+   <div class="container">
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="#blog" class="nav-link active" data-section="blog">Blog</a>
+                <a href="#recettes" class="nav-link" data-section="recettes">Recettes</a>
+            </div>
+        </div>
+
+        <!-- Section Blog -->
+        <div id="blog-section" class="content-section active">
+            <div class="posts-container">
+                {% for post in posts %}
+                    <article class="post-card">
+                        {% if post.image %}
+                            <div class="post-background" style="background-image: url('{{ post.image }}')"></div>
+                            <div class="post-overlay"></div>
+                        {% endif %}
+                        <div class="post-content">
+                            <div class="post-header">
+                                <div class="post-author"></div>
+                                <div class="post-info">
+                                    <h3>{{ post.title }}</h3>
+                                    <span class="post-date">{{ post.date|date('d M Y') }}</span>
+                                </div>
+                            </div>
+                            <p class="post-description">{{ post.content }}</p>
+                            <div class="post-footer">
+                                <span class="category-tag">{{ post.category }}</span>
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Section Recettes -->
+        <div id="recettes-section" class="content-section">
+            <div class="posts-container">
+                {% for plat in plats %}
+                    <article class="post-card">
+                        {% if plat.image %}
+                            <div class="post-background" style="background-image: url('{{ plat.image }}')"></div>
+                            <div class="post-overlay"></div>
+                        {% endif %}
+                        <div class="post-content">
+                            <div class="post-header">
+                                <div class="post-author"></div>
+                                <div class="post-info">
+                                    <h3>{{ plat.title }}</h3>
+                                    <span class="post-date">{{ plat.calories }} calories</span>
+                                </div>
+                            </div>
+                            <p class="post-description">{{ plat.content }}</p>
+                            <div class="post-footer">
+                                <span class="category-tag">Recette</span>
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    {% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const links = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.content-section');
+
+    links.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault(); // Ajoute cette ligne pour empêcher le défilement
+
+            // Remove active classes
+            links.forEach(l => l.classList.remove('active'));
+            sections.forEach(s => s.classList.remove('active'));
+
+            // Add active class to clicked link
+            link.classList.add('active');
+
+            // Show corresponding section
+            const sectionId = link.getAttribute('data-section') + '-section';
+            document.getElementById(sectionId).classList.add('active');
+        });
+    });
+});
+    </script>
+   
+    
+    {% endblock %}
+{% endblock %}

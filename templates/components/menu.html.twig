@@ -1,0 +1,30 @@
+
+{% if app.user %}
+<div class="menu-container">
+    <div class="menu-button">
+        <i class="fa fa-compass fs-3"></i>
+    </div>
+    <div class="menu-items">
+    <a href="{{path('app_blog')}}">
+        <div class="menu-item">
+           <span style="font-size:25px; color:black; margin-bottom:8px;"> &#128240; </span>
+        </div>
+        </a>
+        <a href="{{path('app_profil')}}">
+        <div class="menu-item">
+            <span style="font-size:25px; color:black; margin-bottom:8px;"> &#128293; </span>
+        </div>
+        </a>
+        <div class="menu-item">
+             <span style="font-size:25px; color:black; margin-bottom:8px;"> &#127939; </span>
+        </div>
+        <a href="{{path('app_logout')}}">
+         <div class="menu-item">
+            <i class="fa fa-sign-out"></i>
+        </div>
+        </a>
+        <!-- Ajoutez d'autres items si nécessaire -->
+    </div>
+</div>
+{% endif %}
+

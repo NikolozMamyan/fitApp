@@ -5,9 +5,11 @@
     --fresh-peach: #EAC4D5;
     --warm-sand: #EAE1DF;
 }
+a{
+    text-decoration: none;
+}
 
 body{
-    background: linear-gradient(135deg, var(--soft-mint), var(--calm-blue));
     min-height: 100vh;
     padding: 2rem 0;
 }
@@ -292,6 +294,7 @@ body{
     left: 0;
     right: 0;
     bottom: 0;
+    z-index: -2;
     background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
 }
 
@@ -451,14 +454,6 @@ body{
     margin: 0.3rem 0 0 0;
 }
 
-.clock-widget {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 1rem 2rem;
-    border-radius: 12px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
 
 
 
@@ -503,24 +498,60 @@ body{
         opacity: 0;
     }
 }
-
-.add-food-btn {
-    background: #27ae60 !important;
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-  }
-  
-.add-food-btn:hover {
-    background: #2c312e !important;
-    transform: translateY(-2px);
+.menu-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 100;
 }
+
+.menu-button {
+    width: 60px;
+    height: 60px;
+    background-color:#17a2b8;;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    cursor: pointer;
+    
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.menu-button:hover{
+    transform: translateY(-2px);
+    background-color: #138496;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+.menu-items {
+    display: none;
+    position: absolute;
+    flex-direction: column;
+    bottom: 70px;
+    left: 0;
+}
+
+.menu-container.active .menu-items {
+    display: flex;
+}
+
+.menu-item {
+    width: 50px;
+    height: 50px;
+    background-color: #17a2b8;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    background-color: #138496;
+}
+
   .history-card {
       background: white;
       border-radius: 20px;
@@ -632,7 +663,7 @@ body{
       right: 2rem;
       padding: 1rem 1.5rem;
       border-radius: 50px;
-      background-color: var(--fresh-peach);
+      background-color: #27ae60;
       color: white;
       border: none;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -646,6 +677,7 @@ body{
   
   .add-food-btn:hover {
       transform: translateY(-2px);
+      background-color: #138496;
       box-shadow: 0 6px 16px rgba(0,0,0,0.2);
   }
   
