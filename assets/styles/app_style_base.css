@@ -424,7 +424,7 @@ body{
 
 @media (max-width: 768px) {
     .profile-wrapper {
-        padding: 1rem;
+        padding: 0rem;
     }
 }
 
@@ -739,7 +739,7 @@ body{
   /* Mobile Responsive Styles */
 @media (max-width: 768px) {
     .profile-header {
-        padding: 1.5rem;
+        padding: 0rem;
     }
 
     .top-row {

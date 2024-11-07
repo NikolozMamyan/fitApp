@@ -1,20 +1,375 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_app.html.twig' %}
 
 {% block title %}Hello ActivityController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/Nikoloz/Desktop/FitApp/fitapp/src/Controller/ActivityController.php</code></li>
-        <li>Your template at <code>C:/Users/Nikoloz/Desktop/FitApp/fitapp/templates/activity/index.html.twig</code></li>
-    </ul>
+        .nav-container {
+            position: fixed;
+            padding-top: 22px;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-evenly;
+            gap: 2rem;
+            position: relative;
+        }
+
+        .nav-link {
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 1rem 0.5rem;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link.active {
+            color: #6200ee;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #6200ee;
+            transform-origin: center;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scaleX(1);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #6200ee;
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(0.5);
+        }
+
+        .content-section {
+            margin-top: 50px;
+            display: none;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Ajoutez ici le contenu de vos sections */
+        .section-content {
+            padding: 2rem 0;
+        }
+         .exercise-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+/* Style amélioré pour les cartes d'exercices */
+.exercise-card {
+    background: linear-gradient(145deg, #ffffff, #f3f3f3);
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.1),
+                -5px -5px 15px rgba(255,255,255,0.8);
+    border-radius: 20px;
+    padding: 2rem;
+    width: 280px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.exercise-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 8px 8px 20px rgba(0,0,0,0.15),
+                -8px -8px 20px rgba(255,255,255,0.9);
+}
+
+.exercise-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #6200ee, #9d4edd);
+}
+
+.exercise-card h3 {
+    color: #2c3e50;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+.exercise-card button {
+    background: linear-gradient(45deg, #6200ee, #9d4edd);
+    border-radius: 25px;
+    padding: 0.8rem 2rem;
+    border: none;
+    color: white;
+    font-weight: 600;
+    transform: translateY(0);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.exercise-card button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(98, 0, 238, 0.3);
+}
+
+/* Timer rond amélioré */
+.timer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 100%;
+}
+
+.timer-circle {
+    width: min(300px, 80vw);
+    height: min(300px, 80vw);
+    border-radius: 50%;
+    background: conic-gradient(#6200ee var(--progress, 0%), #f0f0f0 var(--progress, 0%));
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(98, 0, 238, 0.4);
+    }
+    70% {
+        transform: scale(1.02);
+        box-shadow: 0 0 0 15px rgba(98, 0, 238, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(98, 0, 238, 0);
+    }
+}
+
+.timer-circle::before {
+    content: '';
+    position: absolute;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.timer-display {
+    position: relative;
+    z-index: 1;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.timer-pointer {
+    position: absolute;
+    width: 2px;
+    height: 90px;
+    background: #6200ee;
+    transform-origin: bottom center;
+    left: calc(50% - 1px);
+    bottom: 50%;
+    z-index: 2;
+    border-radius: 1px;
+}
+.timer-controls {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.timer-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-width: 44px;
+    height: 44px;
+    padding: 0.8rem;
+    background: linear-gradient(45deg, #6200ee, #9d4edd);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.timer-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(98, 0, 238, 0.3);
+}
+
+.timer-button-active {
+    background: linear-gradient(45deg, #4527a0, #6200ee);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.timer-button i {
+    font-size: 1.2rem;
+}
+
+        /* Styles pour la section Méditation */
+        .meditation-button {
+            background-color: #6200ee;
+            color: #fff;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .meditation-button:hover {
+            background-color: #4527a0;
+        }
+
+        @media (max-width: 768px) {
+    .timer-circle {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .timer-controls {
+        gap: 0.8rem;
+    }
+    
+    .timer-button {
+        min-width: 40px;
+        height: 40px;
+        padding: 0.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .timer-circle {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .timer-display {
+        font-size: 2rem;
+    }
+}
+    </style>
+
+
+  <div class="container">
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="#" class="nav-link active" data-section="exercices">Exercices</a>
+                <a href="#" class="nav-link" data-section="timer">Timer</a>
+                <a href="#" class="nav-link" data-section="meditation">Méditation</a>
+            </div>
+        </div>
+
+        <div id="exercices-section" class="content-section active">
+            <div class="section-content">
+                <div class="exercise-container">
+                    <div class="exercise-card">
+                        <h3>Squats</h3>
+                        <p>Faites 3 séries de 10 squats.</p>
+                        <button>Commencer</button>
+                    </div>
+                    <div class="exercise-card">
+                        <h3>Planches</h3>
+                        <p>Tenez la planche pendant 30 secondes.</p>
+                        <button>Commencer</button>
+                    </div>
+                    <div class="exercise-card">
+                        <h3>Burpees</h3>
+                        <p>Faites 15 burpees.</p>
+                        <button>Commencer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="timer-section" class="content-section">
+            <div class="section-content">
+
+<div class="timer-container mt-5">
+    <div class="timer-circle">
+        <div class="timer-pointer"></div>
+        <div class="timer-display">
+            <span id="minutes">00</span>:<span id="seconds">00</span>:<span id="milliseconds">00</span>
+        </div>
+    </div>
+<div class="timer-controls">
+    <button id="startTimer" class="timer-button" title="Démarrer">
+        <i class="fas fa-play"></i>
+    </button>
+    <button id="stopTimer" class="timer-button" title="Arrêter">
+        <i class="fas fa-pause"></i>
+    </button>
+    <button id="resetTimer" class="timer-button" title="Réinitialiser">
+        <i class="fas fa-redo"></i>
+    </button>
 </div>
+</div>
+            </div>
+        </div>
+
+        <div id="meditation-section" class="content-section">
+            <div class="section-content">
+                <p>Détendez-vous et profitez d'un moment de calme.</p>
+                <button class="meditation-button">Démarrer</button>
+            </div>
+        </div>
+    </div>
+ <script src="{{ asset('js/activity.js') }}" defer></script> 
 {% endblock %}
