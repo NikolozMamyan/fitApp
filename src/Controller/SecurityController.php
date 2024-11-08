@@ -2,7 +2,11 @@
 
 namespace App\Controller;
 
+
+
 use App\Entity\User;
+
+use App\Service\BrevoEmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,6 +63,7 @@ class SecurityController extends AbstractController
             $user = new User();
             $user->setEmail($email);
             $user->setName($name);
+
     
     
             $hashedPassword = $passwordHasher->hashPassword($user, $password);
@@ -66,6 +71,9 @@ class SecurityController extends AbstractController
             // Sauvegarde dans la base de données
             $entityManager->persist($user);
             $entityManager->flush();
+            $mailService = new BrevoEmailService;
+$mailService->mailSender($email);
+
     
             // Redirection après l'inscription
             $this->addFlash('success', 'Compte créé avec succès. Vous pouvez vous connecter.');
