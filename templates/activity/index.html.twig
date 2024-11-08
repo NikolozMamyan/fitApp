@@ -116,15 +116,21 @@
     border-radius: 20px;
     padding: 2rem;
     width: 280px;
+    background-size: cover;
+    background-position: center;
+    color: white;
     transition: transform 0.3s, box-shadow 0.3s;
     position: relative;
     overflow: hidden;
+    background-image: var(--background-image);
 }
 
 .exercise-card:hover {
     transform: translateY(-5px);
     box-shadow: 8px 8px 20px rgba(0,0,0,0.15),
                 -8px -8px 20px rgba(255,255,255,0.9);
+    background-image: var(--background-image-hover);
+    animation: pulse 1s ease-in-out infinite;
 }
 
 .exercise-card::before {
@@ -138,7 +144,7 @@
 }
 
 .exercise-card h3 {
-    color: #2c3e50;
+    color: #fff;
     font-size: 1.4rem;
     margin-bottom: 1rem;
 }
@@ -158,6 +164,7 @@
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(98, 0, 238, 0.3);
 }
+
 
 /* Timer rond amélioré */
 .timer-container {
@@ -320,21 +327,16 @@
         <div id="exercices-section" class="content-section active">
             <div class="section-content">
                 <div class="exercise-container">
-                    <div class="exercise-card">
-                        <h3>Squats</h3>
-                        <p>Faites 3 séries de 10 squats.</p>
+ {% for exercise in exercises %}
+                    <div class="exercise-card" style="
+                        --background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.8)), url('{{ asset(exercise.image) }}');
+                        --background-image-hover: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('{{ asset(exercise.image) }}');
+                        ">
+                        <h3>{{ exercise.title }}</h3>
+                        <p>{{ exercise.description }}</p>
                         <button>Commencer</button>
                     </div>
-                    <div class="exercise-card">
-                        <h3>Planches</h3>
-                        <p>Tenez la planche pendant 30 secondes.</p>
-                        <button>Commencer</button>
-                    </div>
-                    <div class="exercise-card">
-                        <h3>Burpees</h3>
-                        <p>Faites 15 burpees.</p>
-                        <button>Commencer</button>
-                    </div>
+                {% endfor %}
                 </div>
             </div>
         </div>
