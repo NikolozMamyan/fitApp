@@ -13,7 +13,7 @@ class BrevoEmailService
     
     public function mailSender($email, $name, Environment $twig)
     {
-        $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', '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');
+        $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', '');
 
         $apiInstance = new TransactionalEmailsApi(new Client(), $config);
 
