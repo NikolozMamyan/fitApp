@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\User;
 
 use Twig\Environment;
+use Symfony\Component\Uid\Uuid;
 use App\Service\BrevoEmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,7 +37,7 @@ class SecurityController extends AbstractController
     public function signUp(
         Request $request, 
         UserPasswordHasherInterface $passwordHasher, 
-        EntityManagerInterface $entityManager, Environment $twig
+        EntityManagerInterface $entityManager, BrevoEmailService $mailService 
     ): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
@@ -62,6 +63,8 @@ class SecurityController extends AbstractController
     
             // Création de l'utilisateur
             $user = new User();
+            $activationToken = Uuid::v4()->toRfc4122();
+            $user->setActivationToken($activationToken);
             $user->setEmail($email);
             $user->setName($name);
 
@@ -69,11 +72,12 @@ class SecurityController extends AbstractController
     
             $hashedPassword = $passwordHasher->hashPassword($user, $password);
             $user->setPassword($hashedPassword);
+            $user->setIsVerified(false);
             // Sauvegarde dans la base de données
             $entityManager->persist($user);
             $entityManager->flush();
-            $mailService = new BrevoEmailService;
-$mailService->mailSender($email, $name, $twig);
+            
+            $mailService->mailSender($email, $name, $activationToken);
 
     
             // Redirection après l'inscription
