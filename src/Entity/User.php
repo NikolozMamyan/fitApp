@@ -48,6 +48,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: FoodConsumed::class, mappedBy: 'user')]
     private Collection $foodConsumeds;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $isVerified = false;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $activationToken = null;
+
     public function __construct()
     {
         $this->userData = new ArrayCollection();
@@ -201,4 +207,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getIsVerified(): bool
+{
+    return $this->isVerified;
+}
+
+public function setIsVerified(bool $isVerified): self
+{
+    $this->isVerified = $isVerified;
+    return $this;
+}
+public function getActivationToken(): ?string
+{
+    return $this->activationToken;
+}
+
+public function setActivationToken(?string $activationToken): self
+{
+    $this->activationToken = $activationToken;
+    return $this;
+}
 }
