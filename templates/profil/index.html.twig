@@ -121,7 +121,7 @@
     <div class="profile-container">
         <!-- Nouvelle disposition de l'en-tête -->
         <div class="profile-header">
-            <div class="header-content">
+            <div class="pt-5 header-content">
                 <!-- Première rangée avec profil et horloge -->
                 <div class="top-row">
                     <!-- Section profil à gauche -->
@@ -153,7 +153,7 @@
                         </div>
                     </div>
                 </div>
-<div class="stats-container">
+<div class="ms-3 stats-container">
 
     <div class="row g-4">
     {% if stats is null %}
@@ -162,7 +162,7 @@
                 <i class="fas fa-info-circle"></i>
                 <p class="mb-0">Vous n'avez pas créé de programme</p>
             </div>
-            <a class="btn btn-light btn-lg rounded-pill" style="background-color:var(--warm-sand);" href="{{ path('app_calcul') }}">Créer un programme</a>
+            <a class="btn text-light btn-lg rounded-pill" style="background:linear-gradient(45deg, #FF6B6B, #FF8E53);" href="{{ path('app_calcul') }}">Créer un programme</a>
         </div>
     {% else %}
 <!-- Calories (pleine largeur) -->
