@@ -39,6 +39,41 @@ document.addEventListener('DOMContentLoaded', async function() {
             </div>
         `;
     }
+    function createMobileSelect() {
+        const select = document.createElement('select');
+        select.className = 'form-select time-range-mobile d-md-none';
+        
+        const options = [
+            { value: 'week', text: 'Semaine' },
+            { value: 'month', text: 'Mois' },
+            { value: 'year', text: 'Année' }
+        ];
+
+        options.forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option.value;
+            opt.textContent = option.text;
+            if (option.value === currentPeriod) {
+                opt.selected = true;
+            }
+            select.appendChild(opt);
+        });
+
+        // Insérer le select avant les boutons
+        const buttonContainer = document.querySelector('.time-range-selector');
+        buttonContainer.insertBefore(select, buttonContainer.firstChild);
+
+        // Gestionnaire d'événement pour le select
+        select.addEventListener('change', async function() {
+            currentPeriod = this.value;
+            // Mettre à jour le bouton actif correspondant
+            timeRangeButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.range === currentPeriod);
+            });
+            await loadNutritionData(currentPeriod);
+        });
+    }
+    createMobileSelect()
 
     // Fonction pour mettre à jour le graphique de tendance
     function updateTrendGraph(trendData, period) {
@@ -159,6 +194,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             timeRangeButtons.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             currentPeriod = this.dataset.range;
+            const mobileSelect = document.querySelector('.time-range-mobile');
+            if (mobileSelect) {
+                mobileSelect.value = currentPeriod;
+            }
             await loadNutritionData(currentPeriod);
         });
     });

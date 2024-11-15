@@ -836,6 +836,27 @@ body{
         bottom: 1rem;
         right: 1rem;
     }
+    .time-range-selector .btn {
+        display: none;
+    }
+    .time-range-mobile {
+        display: block;
+        padding: 10px;
+        width: 110px;
+        padding: 0.3rem 1rem;
+        border-radius: 15px;
+        margin: 0 0.2rem;
+    }
+}
+
+@media (min-width: 769px) {
+    .time-range-mobile {
+        display: none;
+    }
+    
+    .time-range-selector .btn {
+        display: inline-block;
+    }
 }
 /*Animations*/
 
