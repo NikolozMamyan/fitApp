@@ -2,36 +2,46 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Exercise;
+use App\Repository\ExerciseRepository;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ActivityController extends AbstractController
 {
     #[Route('/activity', name: 'app_activity')]
-    public function index(): Response
+    public function index(ExerciseRepository $exerciseRepository): Response
     {
-        $exercises = [
-            [
-                'title' => 'Squats',
-                'description' => 'Faites 3 séries de 10 squats.',
-                'image' => '/images/squat.jpg',
-            ],
-            [
-                'title' => 'Planches',
-                'description' => 'Tenez la planche pendant 30 secondes.',
-                'image' => '/images/planche.jpg',
-            ],
-            [
-                'title' => 'Burpees',
-                'description' => 'Faites 15 burpees.',
-                'image' => '/images/burpees.jpg',
-            ],
-        ];
+        $exercises = $exerciseRepository->findAll();
+
 
         return $this->render('activity/index.html.twig', [
-            'controller_name' => 'ActivityController',
             'exercises' => $exercises,
+        ]);
+    }
+
+
+    #[Route('/exercise/{id}', name: 'exercise_start')]
+    public function start(int $id, ExerciseRepository $exerciseRepository): Response
+    {
+        $exercise = $exerciseRepository->findWithVariations($id);
+    
+        if (!$exercise) {
+            throw $this->createNotFoundException('Exercice non trouvé');
+        }
+    
+        // Préparer les variations sous forme de JSON
+        $variations = $exercise->getVariations()->toArray();
+        $data = array_map(fn($v) => $v->toArray(), $variations);
+  
+        
+    
+        // Passer uniquement l'exercice à la vue Twig
+        return $this->render('activity/start.html.twig', [
+            'exercise' => $exercise,
+            'data' => $data, // On peut le passer en option
         ]);
     }
 }

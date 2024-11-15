@@ -1,0 +1,345 @@
+{# templates/activity/start.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ exercise.title }} - Exercice{% endblock %}
+
+{% block stylesheets %}
+<style>
+.exercise-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+    color: white;
+    padding: 2rem;
+}
+
+.exercise-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.exercise-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.exercise-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.exercise-image-container {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.exercise-image {
+    max-width: 200px;
+    border-radius: 15px;
+    animation: pulse 2s infinite;
+}
+
+.exercise-description {
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 2rem 0;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.timer-section {
+    display: none;
+    text-align: center;
+}
+
+.timer-display {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: white;
+    margin: 2rem 0;
+}
+
+.series-counter {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.series-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.series-dot.completed {
+    background: #4ECDC4;
+    transform: scale(1.2);
+}
+
+.btn-exercise {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    display:flex;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 1rem;
+}
+
+.rest-info {
+    background: rgba(78, 205, 196, 0.2);
+    padding: 1rem;
+    border-radius: 10px;
+    margin: 1rem 0;
+    display: none;
+}
+.variation-progress {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.variation-step {
+    display: flex;
+    align-items: center;
+    margin: 0 1rem;
+}
+
+.variation-dot {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: white;
+}
+
+.variation-dot.active {
+    background: #4ECDC4;
+}
+
+.variation-dot.completed {
+    background: #FF6B6B;
+}
+
+.variation-line {
+    width: 50px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 0 0.5rem;
+}
+
+.next-exercise-preview {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+    display: none;
+}
+
+.next-exercise-preview img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="exercise-container">
+    <div class="exercise-card">
+        <div class="exercise-header">
+            <h1 class="exercise-title">{{ exercise.title }}</h1>
+            
+            <div class="variation-progress">
+                {% for variation in exercise.variations %}
+                    <div class="variation-step">
+                        <div class="variation-dot" data-variation="{{ loop.index }}">
+                            {{ loop.index }}
+                        </div>
+                        {% if not loop.last %}
+                            <div class="variation-line"></div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+<div class="series-counter" id="seriesCounter"></div>
+        <div id="exerciseSection">
+        
+            <div class="exercise-image-container">
+               
+            </div>
+            <div class="exercise-description" id="currentExerciseDescription"></div>
+            
+            <button id="completeButton" class="btn-exercise">Terminer</button>
+        </div>
+
+        <div id="timerSection" class="timer-section">
+            <div class="rest-info">
+                Temps de repos
+            </div>
+            <div class="timer-display">
+                <span id="timeLeft">00:00</span>
+            </div>
+            
+            <div class="next-exercise-preview" id="nextExercisePreview">
+                <h3>Prochain exercice:</h3>
+                <div class="preview-content"></div>
+            </div>
+            
+            <button id="nextButton" class="btn-exercise">Suivant</button>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const exercises = {{ data|json_encode|raw }};
+    let currentVariationIndex = 0;
+    let currentSeries = 1;
+    let timer;
+    
+    const exerciseSection = document.getElementById('exerciseSection');
+    const timerSection = document.getElementById('timerSection');
+    const completeButton = document.getElementById('completeButton');
+    const nextButton = document.getElementById('nextButton');
+    const timeLeft = document.getElementById('timeLeft');
+    const currentExerciseDescription = document.getElementById('currentExerciseDescription');
+    const seriesCounter = document.getElementById('seriesCounter');
+    const nextExercisePreview = document.getElementById('nextExercisePreview');
+
+    function updateCurrentExercise() {
+        const currentExercise = exercises[currentVariationIndex];
+        
+        currentExerciseDescription.innerHTML = `
+            <h2>${currentExercise.title}</h2>
+            <p>${currentExercise.description}</p>
+            ${currentExercise.repetitions ? 
+                `<p>${currentExercise.repetitions} répétitions</p>` : 
+                `<p>${currentExercise.duration} secondes</p>`}
+        `;
+        
+        // Mise à jour des points de série
+        updateSeriesDots(currentExercise.series);
+        
+        // Mise à jour du marqueur de progression
+        updateProgressDots();
+    }
+
+    function updateSeriesDots(totalSeries) {
+            if (typeof totalSeries !== 'number' || isNaN(totalSeries) || totalSeries < 1) {
+        // Si totalSeries n'est pas un nombre valide, ne pas mettre à jour les points de série
+        return;
+    }
+        seriesCounter.innerHTML = '';
+        for(let i = 0; i < totalSeries; i++) {
+            const dot = document.createElement('div');
+            dot.className = `series-dot ${i < currentSeries - 1 ? 'completed' : ''}`;
+            seriesCounter.appendChild(dot);
+        }
+    }
+
+    function updateProgressDots() {
+        document.querySelectorAll('.variation-dot').forEach((dot, index) => {
+            dot.classList.remove('active', 'completed');
+            if(index === currentVariationIndex) {
+                dot.classList.add('active');
+            } else if(index < currentVariationIndex) {
+                dot.classList.add('completed');
+            }
+        });
+    }
+
+    function startRestTimer(restTime) {
+            if (typeof restTime !== 'number' || isNaN(restTime)) {
+        // Si restTime n'est pas un nombre valide, gérer le cas par défaut
+        restTime = 60; // ou une autre valeur par défaut
+    }
+        let timeRemaining = restTime;
+        timerSection.style.display = 'block';
+        exerciseSection.style.display = 'none';
+        
+        // Afficher le prochain exercice s'il existe
+        if(currentVariationIndex < exercises.length - 1) {
+            const nextExercise = exercises[currentVariationIndex + 1];
+            nextExercisePreview.style.display = 'block';
+            nextExercisePreview.querySelector('.preview-content').innerHTML = `
+                <h4>${nextExercise.title}</h4>
+            `;
+        } else {
+            nextExercisePreview.style.display = 'none';
+        }
+        
+        timer = setInterval(() => {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            timeLeft.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            if (timeRemaining <= 0) {
+                clearInterval(timer);
+                nextButton.disabled = false;
+            }
+            timeRemaining--;
+        }, 1000);
+    }
+
+    completeButton.addEventListener('click', function() {
+        const currentExercise = exercises[currentVariationIndex];
+        if(currentSeries < currentExercise.series) {
+            currentSeries++;
+            startRestTimer(currentExercise.restTime);
+        } else {
+            currentSeries = 1;
+            if(currentVariationIndex < exercises.length - 1) {
+                startRestTimer({{ exercise.finalRestTime }});
+            } else {
+                // Exercice terminé
+                window.location.href = '/activity';
+            }
+        }
+    });
+
+    nextButton.addEventListener('click', function() {
+        clearInterval(timer);
+        if(currentSeries === 1) {
+            currentVariationIndex++;
+        }
+        
+        timerSection.style.display = 'none';
+        exerciseSection.style.display = 'block';
+        updateCurrentExercise();
+    });
+
+    // Initialisation
+    updateCurrentExercise();
+});
+</script>
+{% endblock %}
