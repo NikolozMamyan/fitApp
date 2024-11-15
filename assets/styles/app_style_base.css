@@ -498,8 +498,7 @@ body{
     align-items: center;
     color: #fff;
     cursor: pointer;
-    animation: spin 2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transition: transform 0.2s, box-shadow 0.2s;
+    animation: spinBack 2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .menu-button:hover{
     transform: translateY(-2px);
@@ -517,6 +516,11 @@ body{
 
 .menu-container.active .menu-items {
     display: flex;
+}
+
+.menu-button.active{
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: spin 2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .menu-item {
@@ -855,4 +859,9 @@ body{
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+@keyframes spinBack {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(-360deg); }
 }
